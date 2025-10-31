@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:icalendar_parser/icalendar_parser.dart';
 import 'package:shared_cal/components/event_row.dart';
 import 'package:shared_cal/model/calendar.dart';
+import 'package:shared_cal/views/dialogs/add_calendar.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -85,12 +87,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ElevatedButton(
             onPressed: () async {
-              final file = await _pickFile();
-              if (file == null) return;
-              final lines = file.readAsLinesSync();
-              if (lines.isEmpty) return;
-              _cal = ICalendar.fromLines(lines);
-              _calendarJsonData.value = Calendar.fromICal(_cal!);
+              showDialog(
+                context: context,
+                builder: (context) => AddCalendarDialog(),
+              );
+              // final file = await _pickFile();
+              // if (file == null) return;
+              // final lines = file.readAsLinesSync();
+              // if (lines.isEmpty) return;
+              // _cal = ICalendar.fromLines(lines);
+              // _calendarJsonData.value = Calendar.fromICal(_cal!);
             },
             child: Text("upload ics"),
           ),
